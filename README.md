@@ -1,11 +1,10 @@
 # Contact-Book
 DAY - 42/100 - Project - Contact Book
-
 # 📒 Contact Book Desktop Application
 
 A **Desktop Contact Management Application** built using **Python and PySide6**.
 
-This application allows users to **add, edit, delete, search, import, and export contacts** using a simple and intuitive graphical interface.
+This application allows users to **add, edit, delete, search, import, and export contacts** using a simple graphical interface.
 
 Contacts are stored in **JSON format**, and the application supports **VCF (vCard)** files for importing and exporting contacts.
 
@@ -22,25 +21,25 @@ Contacts are stored in **JSON format**, and the application supports **VCF (vCar
 
 ## Search
 
-- Real-time search filtering
-- Highlights matched names
+- Real-time contact search
+- Highlight matching names
 
 ## Import Contacts
 
 - Import contacts from **VCF (.vcf)** files
-- Detects number of contacts before importing
+- Detect number of contacts before importing
 - Supports bulk imports
 
 ## Export Contacts
 
-- Export all contacts to **VCF format**
-- Compatible with phones and contact applications
+- Export contacts to **VCF format**
+- Compatible with phone contact apps
 
-## Phone Number Validation
+## Phone Validation
 
 - Country code support
 - Digit validation rules
-- Special handling for Japan numbers
+- Special rule for Japan numbers
 
 ## Data Storage
 
@@ -49,33 +48,33 @@ Contacts are stored locally using **JSON**.
 Advantages:
 
 - Fast loading
-- Easy modification
 - Lightweight storage
+- Easy modification
 
 ---
 
-# 🏗 Application Architecture
+# 🏗 Project Architecture
 
-The project follows a **modular architecture** separating GUI and logic.
+The project follows a **modular architecture** separating UI and logic.
 
-
+```
 main file
 │
 ├── CONTACT_BOOK_GUI.py
-│ (User Interface)
+│     (User Interface)
 │
 ├── CONTACT_BOOK_MANAGER.py
-│ (Contact Logic + File Handling)
+│     (Contact Logic + File Handling)
 │
 └── CONTACT_BOOK_CONTACTS.json
-(Contact Database)
-
+      (Contact Database)
+```
 
 ---
 
 # 📂 Project Structure
 
-
+```
 ContactBook
 │
 ├── 42_CONTACTS_BOOK.py
@@ -84,7 +83,7 @@ ContactBook
 ├── CONTACT_BOOK_CONTACTS.json
 ├── CONTACTS.vcf
 └── README.md
-
+```
 
 ---
 
@@ -104,146 +103,127 @@ ContactBook
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/contact-book.git
-cd contact-book
-Install Dependencies
+git clone https://github.com/guptaji0358/Contact-Book-.git
+cd Contact-Book-
+```
+
+---
+
+## Install Dependencies
+
+```bash
 pip install PySide6
-Run the Application
+```
+
+---
+
+## Run the Application
+
+```bash
 python 42_CONTACTS_BOOK.py
+```
 
 The main application file is:
 
+```
 42_CONTACTS_BOOK.py
+```
 
 This file starts the application and loads the GUI.
 
-The main script imports the GUI and Manager modules.
-See implementation in:
+---
 
-🖥 Application Interface
-
-Main window includes:
-
-Search bar
-
-Contact table
-
-Add button
-
-Edit button
-
-Delete button
-
-Import button
-
-Export button
-
-The UI is implemented in:
-
-📥 Import Contacts
-
-The application can import contacts from VCF files.
+# 📥 Import Example
 
 Example VCF format:
 
+```
 BEGIN:VCARD
 VERSION:3.0
 FN:Naruto Uzumaki
 TEL:+81 9012345678
 EMAIL:naruto@leaf.com
 END:VCARD
+```
 
-The import logic reads and parses VCF lines and extracts:
+During import the application shows detection:
 
-Name
+```
+Contacts detected: 25
+```
 
-Phone
+---
 
-Email
+# 📤 Export Example
 
-Implementation located in:
+Exported contact format:
 
-📤 Export Contacts
-
-Contacts can be exported into a VCF file compatible with:
-
-Android
-
-iPhone
-
-Google Contacts
-
-Outlook
-
-Example exported contact:
-
+```
 BEGIN:VCARD
 VERSION:3.0
 FN:Gojo Satoru
 TEL:+81 9012345679
 EMAIL:gojo@jujutsu.com
 END:VCARD
-🔍 Search Functionality
+```
 
-The application supports dynamic search filtering.
+---
+
+# 🔍 Search
+
+The application supports **dynamic search filtering**.
 
 Features:
 
-Real-time filtering
+- Case-insensitive search
+- Highlighted matching text
+- Fast filtering
 
-Highlighted matching text
+---
 
-Case-insensitive search
-
-🧪 Testing
+# 🧪 Testing
 
 The application has been tested with:
 
-Small datasets (25 contacts)
-
-Medium datasets (200 contacts)
-
-Large datasets (1000+ contacts)
+- 25 contacts
+- 1000 contacts
 
 Edge cases handled:
 
-Missing phone numbers
+- Missing phone numbers
+- Missing emails
+- Duplicate contacts
+---
 
-Missing emails
+# 🔓 Customization & Contributions
 
-Duplicate contacts
+This project is open for customization and learning.
 
-📈 Future Improvements
+Anyone can download the source code and modify it according to their needs.
 
-Possible future enhancements:
+Possible things you can do:
 
-Dark mode theme
+- Improve the UI
+- Add new features
+- Change validation rules
+- Connect a database
+- Extend import/export formats
 
-Contact groups
+If you have ideas or improvements, feel free to modify the project or suggest enhancements.
 
-Contact images
+This project is meant for **learning, experimentation, and further development**.
 
-SQLite database storage
+---
 
-Drag-and-drop VCF import
-
-Sorting contacts
-
-👨‍💻 Author
+# 👨‍💻 Author
 
 Robin Gupta
 
-Python Developer
-Learning GUI Application Development
+Python Developer  
+Learning Desktop GUI Development
 
-📜 License
+---
 
-This project is licensed under the MIT License.
+# 📜 License
 
-⭐ Acknowledgements
-
-Python Community
-
-PySide6 Documentation
-
-Open Source Learning Resources
+MIT License
