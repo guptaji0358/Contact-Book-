@@ -10,7 +10,7 @@ from CONTACT_BOOK_MANAGER import ContactBookManager
 def main():
 
     gui = ContactBookGUI()
-    manager = ContactBookManager
+    ContactBookManager
     gui.MainWindow.show()
 
 if __name__ == "__main__":
