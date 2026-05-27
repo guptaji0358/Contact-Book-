@@ -2,6 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from CONTACT_BOOK_MANAGER import ContactBookManager
+import ctypes
 import sys 
 import os
 import html
@@ -12,28 +13,34 @@ class ContactBookGUI():
     def __init__(self):
         super().__init__()
 
-        self.TableStyle = ("""QTableWidget {background-color: #2b2b2b;color: white;gridline-color: transparent;}
-                           QHeaderView::section {background-color: #1f1f1f;color: white;font-weight: bold;border: none;}
-                           """)
+        self.TableStyle = ("""
+                            QTableWidget {background-color: #2b2b2b;color: white;gridline-color: transparent;}
+                            QHeaderView::section {background-color: #1f1f1f;color: white;font-weight: bold;border: none;}
+                        """)
 
-        self.InputStyle = """QLineEdit {border: 2px solid #cccccc;border-radius: 6px;padding: 6px;font-size: 14px;font-family: 'Segoe UI';font-weight:bold;}
-                             QLineEdit:focus {border: 2px solid #2563EB;}"""
+        self.InputStyle = """
+                            QLineEdit {border: 2px solid #cccccc;border-radius: 6px;padding: 6px;font-size: 14px;font-family: 'Segoe UI';font-weight:bold;}
+                            QLineEdit:focus {border: 2px solid #2563EB;}"""
 
-        self.BlueButtonStyle = """QPushButton {background-color: #2563EB;color: white;font-size: 16px;font-family: 'Segoe UI';border-radius: 8px;font-weight:bold;}
-                                  QPushButton:hover {background-color: #3B82F6;}
-                                  QPushButton:pressed {background-color: #1E40AF;}"""
+        self.BlueButtonStyle = """
+                                    QPushButton {background-color: #2563EB;color: white;font-size: 16px;font-family: 'Segoe UI';border-radius: 8px;font-weight:bold;}
+                                    QPushButton:hover {background-color: #3B82F6;}
+                                    QPushButton:pressed {background-color: #1E40AF;}"""
         
-        self.GreyButtonStyle = """QPushButton {background-color: #374151;color: white;font-size: 16px;font-family: 'Segoe UI';border-radius: 8px;font-weight:bold;}
-                                  QPushButton:hover {background-color: #2F3745;}
-                                  QPushButton:pressed {background-color: #1F2937;}"""
+        self.GreyButtonStyle = """
+                                    QPushButton {background-color: #374151;color: white;font-size: 16px;font-family: 'Segoe UI';border-radius: 8px;font-weight:bold;}
+                                    QPushButton:hover {background-color: #2F3745;}
+                                    QPushButton:pressed {background-color: #1F2937;}"""
 
-        self.RedButtonStyle = """QPushButton {background-color: #EF4444;color: white;font-size: 16px;font-family: 'Segoe UI';border-radius: 8px;font-weight:bold;}
-                                 QPushButton:hover {background-color: #F87171;}
-                                 QPushButton:pressed {background-color: #B91C1C;}"""
+        self.RedButtonStyle = """
+                                    QPushButton {background-color: #EF4444;color: white;font-size: 16px;font-family: 'Segoe UI';border-radius: 8px;font-weight:bold;}
+                                    QPushButton:hover {background-color: #F87171;}
+                                    QPushButton:pressed {background-color: #B91C1C;}"""
         
         self.Manager = ContactBookManager()
 
         self.ContactBookApp = QApplication(sys.argv)
+
         self.MainWindow = QWidget()
         self.MainWindow.setWindowTitle("Contact Book")
         self.MainWindow.resize(685,500)
@@ -84,6 +91,7 @@ class ContactBookGUI():
         self.ViewContactButton.setToolTip("View Contacts")
         self.ViewContactButton.move(130,440)
         self.ViewContactButton.setStyleSheet(self.BlueButtonStyle)
+        self.ViewContactButton.setCursor(Qt.PointingHandCursor)
         self.ViewContactButton.clicked.connect(self.ViewContacts)
 
         # Add Button
@@ -92,6 +100,7 @@ class ContactBookGUI():
         self.AddContactButton.setToolTip("Add Contacts")
         self.AddContactButton.move(200,440)
         self.AddContactButton.setStyleSheet(self.BlueButtonStyle)
+        self.AddContactButton.setCursor(Qt.PointingHandCursor)
         self.AddContactButton.clicked.connect(self.AddContacts)
 
         # Delete Button
@@ -100,6 +109,7 @@ class ContactBookGUI():
         self.DeleteContactButton.setToolTip("Delete Contacts")
         self.DeleteContactButton.move(340,440)
         self.DeleteContactButton.setStyleSheet(self.RedButtonStyle)
+        self.DeleteContactButton.setCursor(Qt.PointingHandCursor)
         self.DeleteContactButton.clicked.connect(self.DeleteContacts)
 
         # Edit Button
@@ -108,6 +118,7 @@ class ContactBookGUI():
         self.EditContactButton.setToolTip("Edit Contacts")
         self.EditContactButton.move(270,440)
         self.EditContactButton.setStyleSheet(self.BlueButtonStyle)
+        self.EditContactButton.setCursor(Qt.PointingHandCursor)
         self.EditContactButton.clicked.connect(self.EditContacts)
 
         # Import Button
@@ -116,6 +127,7 @@ class ContactBookGUI():
         self.ImportContactButton.setToolTip("Import Contacts")
         self.ImportContactButton.move(410,440)
         self.ImportContactButton.setStyleSheet(self.BlueButtonStyle)
+        self.ImportContactButton.setCursor(Qt.PointingHandCursor)
         self.ImportContactButton.clicked.connect(self.ImportContacts)
 
         # Export Button
@@ -124,9 +136,11 @@ class ContactBookGUI():
         self.ExportContactButton.setToolTip("Export Contacts")
         self.ExportContactButton.move(480,440)
         self.ExportContactButton.setStyleSheet(self.BlueButtonStyle)
+        self.ExportContactButton.setCursor(Qt.PointingHandCursor)
         self.ExportContactButton.clicked.connect(self.ExportContacts)
 
         self.MainWindow.show()
+        self.DisableMaximizeButton(self.MainWindow)
         self.ContactBookApp.exec()
 
     def SaveNewContact(self):
@@ -139,27 +153,27 @@ class ContactBookGUI():
 
         if not PhoneNo.isdigit():
             QMessageBox.warning(
-                self.AddContactWindow,
-                "Invalid Phone Number",
-                "Phone number must contain only digits."
-                )
+                                self.AddContactWindow,
+                                "Invalid Phone Number",
+                                "Phone number must contain only digits."
+                                )
             
             return
                 
         if Name == "":
             QMessageBox.warning(
-                self.AddContactWindow,
-                "Invalid Name",
-                "Name cannot be empty."
-            )
+                                self.AddContactWindow,
+                                "Invalid Name",
+                                "Name cannot be empty."
+                                )
             return
         
         if PhoneNo == "":
             QMessageBox.warning(
-                self.AddContactWindow,
-                "Invalid Phone Number",
-                "Phone number cannot be empty."
-                )
+                                self.AddContactWindow,
+                                "Invalid Phone Number",
+                                "Phone number cannot be empty."
+                                )
             return
 
         new_id = 1
@@ -167,40 +181,41 @@ class ContactBookGUI():
             new_id = max(contact.get("id",0) for contact in Contacts) + 1
 
         digit_rules = {
-            "+91": 10,
-            "+1": 10,
-            "+44": 10,
-            "+61": 9,
-            "+880": 10,
-            "+55": 11,
-            "+86": 11,
-            "+33": 9,
-            "+49": 10,
-            "+62": 10,
-            "+39": 10,
-            # "+81": 10,
-            "+60": 9,
-            "+52": 10,
-            "+31": 9,
-            "+64": 9,
-            "+92": 10,
-            "+7": 10,
-            "+966": 9,
-            "+65": 8,
-            "+27": 9,
-            "+82": 10,
-            "+34": 9,
-            "+94": 9,
-            "+971": 9
-        }
+                        "+91": 10,
+                        "+1": 10,
+                        "+44": 10,
+                        "+61": 9,
+                        "+880": 10,
+                        "+55": 11,
+                        "+86": 11,
+                        "+33": 9,
+                        "+49": 10,
+                        "+62": 10,
+                        "+39": 10,
+                        # "+81": 10,
+                        "+60": 9,
+                        "+52": 10,
+                        "+31": 9,
+                        "+64": 9,
+                        "+92": 10,
+                        "+7": 10,
+                        "+966": 9,
+                        "+65": 8,
+                        "+27": 9,
+                        "+82": 10,
+                        "+34": 9,
+                        "+94": 9,
+                        "+971": 9
+                        }
+        
         if code == "+81":
             
             if len(PhoneNo) < 9 or len(PhoneNo) > 10:
                 QMessageBox.warning(
-                    self.AddContactWindow,
-                    "Invalid Phone Number",
-                    "Japan numbers must be 9–10 digits."
-                    )
+                                    self.AddContactWindow,
+                                    "Invalid Phone Number",
+                                    "Japan numbers must be 9–10 digits."
+                                    )
                 return
 
         if code in digit_rules:
@@ -208,10 +223,10 @@ class ContactBookGUI():
 
             if len(PhoneNo) != required:
                 QMessageBox.warning(
-                    self.AddContactWindow,
-                    "Invalid Phone Number",
-                    f"{code} numbers must contain {required} digits."
-                )
+                                    self.AddContactWindow,
+                                    "Invalid Phone Number",
+                                    f"{code} numbers must contain {required} digits."
+                                )
                 return
 
         if Email == "":
@@ -224,11 +239,11 @@ class ContactBookGUI():
             if (Name == contact["name"] and Full_Phone == contact["phone"] and Email == contact["email"]):
 
                 reply = QMessageBox.question(
-                    self.AddContactWindow,
-                    "Duplicate Contact",
-                    "Bro this contact already exists.\n\nDo you want to save it as a duplicate?",
-                    QMessageBox.Yes | QMessageBox.No
-                )
+                                            self.AddContactWindow,
+                                            "Duplicate Contact",
+                                            "Bro this contact already exists.\n\nDo you want to save it as a duplicate?",
+                                            QMessageBox.Yes | QMessageBox.No
+                                            )
 
                 if reply == QMessageBox.No:
                     return
@@ -253,7 +268,8 @@ class ContactBookGUI():
 
         self.RecentsContactTable.setItem(InsertNewContactRowinTable,1,item)
         self.RecentsContactTable.setItem(InsertNewContactRowinTable,2,QTableWidgetItem("   "+Full_Phone))  
-        self.RecentsContactTable.setItem(InsertNewContactRowinTable,3,QTableWidgetItem("   "+Email)) 
+        self.RecentsContactTable.setItem(InsertNewContactRowinTable,3,QTableWidgetItem("   "+Email))
+        self.RecentsContactTable.setCursor(Qt.PointingHandCursor)
 
         self.LoadContactsIntoTable()
         self.AddContactWindow.close()
@@ -410,6 +426,7 @@ class ContactBookGUI():
 
             if not name:
                 group = "Others"
+
             else:
                 first = name[0].upper()
 
@@ -462,11 +479,11 @@ class ContactBookGUI():
 
     def CancelWithWarning(self, window, message):
         reply = QMessageBox.question(
-            window,
-            "Discard Changes",
-            message,
-            QMessageBox.Yes | QMessageBox.No
-        )
+                                        window,
+                                        "Discard Changes",
+                                        message,
+                                        QMessageBox.Yes | QMessageBox.No
+                                    )
 
         if reply == QMessageBox.Yes:
             window.close()
@@ -489,18 +506,18 @@ class ContactBookGUI():
 
         if len(SelectedRow) == 0:
             QMessageBox.warning(
-                self.MainWindow,
-                "No Contact Selected",
-                "Please select a contact first."
-            )
+                                self.MainWindow,
+                                "No Contact Selected",
+                                "Please select a contact first."
+                            )
             return None
 
         if len(SelectedRow) > 1:
             QMessageBox.warning(
-                self.MainWindow,
-                "Multiple Contacts Selected",
-                "Please select only one contact."
-            )
+                                self.MainWindow,
+                                "Multiple Contacts Selected",
+                                "Please select only one contact."
+                                )
             return None
 
         return SelectedRow[0]
@@ -512,8 +529,10 @@ class ContactBookGUI():
         checkbox = self.RecentsContactTable.cellWidget(row,0).findChild(QCheckBox)
         if self.SelectedRow == row:
             checkbox.setChecked(False)
+
             for col in range(self.RecentsContactTable.columnCount()):
                 item = self.RecentsContactTable.item(row,col)
+
                 if item:
                     item.setBackground(QBrush())
 
@@ -524,52 +543,55 @@ class ContactBookGUI():
 
             old_checkbox = self.RecentsContactTable.cellWidget(self.SelectedRow,0).findChild(QCheckBox)
             old_checkbox.setChecked(False)
+
             for col in range(self.RecentsContactTable.columnCount()):
                 item = self.RecentsContactTable.item(self.SelectedRow,col)
+
                 if item:
                     item.setBackground(QBrush())
 
         checkbox.setChecked(True)
         for col in range(self.RecentsContactTable.columnCount()):
             item = self.RecentsContactTable.item(row,col)
+
             if item:
                 item.setBackground(QColor(37,99,235,60))
+
         self.SelectedRow = row
 
     def SaveEditedContact(self):
-
         Name = self.AsksName.text().title().strip()
         PhoneDigits = self.AskPhoneNo.text().strip()
         Email = self.AsksEmail.text().strip()
         code = self.CountryCodeContactDropdownforEdit.currentText().split()[0]
 
         digit_rules = {
-            "+91":10,
-            "+1":10,
-            "+44":10,
-            "+61":9,
-            "+880":10,
-            "+55":11,
-            "+86":11,
-            "+33":9,
-            "+49":10,
-            "+62":10,
-            "+39":10,
-            "+60":9,
-            "+52":10,
-            "+31":9,
-            "+64":9,
-            "+92":10,
-            "+7":10,
-            "+966":9,
-            "+65":8,
-            "+27":9,
-            "+82":10,
-            "+34":9,
-            "+94":9,
-            "+971":9
-            }
-        
+                        "+91":10,
+                        "+1":10,
+                        "+44":10,
+                        "+61":9,
+                        "+880":10,
+                        "+55":11,
+                        "+86":11,
+                        "+33":9,
+                        "+49":10,
+                        "+62":10,
+                        "+39":10,
+                        "+60":9,
+                        "+52":10,
+                        "+31":9,
+                        "+64":9,
+                        "+92":10,
+                        "+7":10,
+                        "+966":9,
+                        "+65":8,
+                        "+27":9,
+                        "+82":10,
+                        "+34":9,
+                        "+94":9,
+                        "+971":9
+                        }
+                    
         if code == "+81":
             if len(PhoneDigits) < 9 or len(PhoneDigits) > 10:
                 QMessageBox.warning(self.EditContactWindow,"Invalid Phone Number","Japan numbers must be 9–10 digits.")
@@ -588,26 +610,26 @@ class ContactBookGUI():
 
         if Name == "":
             QMessageBox.warning(
-                self.EditContactWindow,
-                "Invalid Name",
-                "Name cannot be empty."
-            )
+                                self.EditContactWindow,
+                                "Invalid Name",
+                                "Name cannot be empty."
+                            )
             return
 
         if PhoneDigits == "":
             QMessageBox.warning(
-                self.EditContactWindow,
-                "Invalid Phone Number",
-                "Phone number cannot be empty."
-            )
+                                self.EditContactWindow,
+                                "Invalid Phone Number",
+                                "Phone number cannot be empty."
+                                )
             return
 
         if not PhoneDigits.isdigit():
             QMessageBox.warning(
-                self.EditContactWindow,
-                "Invalid Phone Number",
-                "Phone number must contain only digits."
-            )
+                                self.EditContactWindow,
+                                "Invalid Phone Number",
+                                "Phone number must contain only digits."
+                                )
             return
 
         code = self.CountryCodeContactDropdownforEdit.currentText().split()[0]
@@ -626,11 +648,11 @@ class ContactBookGUI():
             if (Name == contact["name"] and FullPhone == contact["phone"] and Email == contact["email"]):
 
                 reply = QMessageBox.question(
-                    self.EditContactWindow,
-                    "Duplicate Contact",
-                    "Bro this contact already exists.\n\nDo you want to save it as a duplicate?",
-                    QMessageBox.Yes | QMessageBox.No
-                )
+                                            self.EditContactWindow,
+                                            "Duplicate Contact",
+                                            "Bro this contact already exists.\n\nDo you want to save it as a duplicate?",
+                                            QMessageBox.Yes | QMessageBox.No
+                                            )
 
                 if reply == QMessageBox.No:
                     return
@@ -642,13 +664,12 @@ class ContactBookGUI():
             if contact.get("id") == self.EditingID:
 
                 self.Manager.EditCoontactJSON(
-                    index=i,
-                    id=self.EditingID,
-                    name=Name,
-                    phone=FullPhone,
-                    email=Email
-                )
-
+                                                index=i,
+                                                id=self.EditingID,
+                                                name=Name,
+                                                phone=FullPhone,
+                                                email=Email
+                                            )
                 break
 
         self.LoadContactsIntoTable()
@@ -662,24 +683,24 @@ class ContactBookGUI():
         contact_id = self.RecentsContactTable.item(row,2).data(Qt.UserRole)
         
         reply = QMessageBox.warning(
-            self.DeleteContactsWindow,
-            "Confirm Delete",
-            f"This Contact will permanently delete:\n{name}\n\nRecovery is not guaranteed.\n"
-            "The creator is not responsible for lost contacts.\n\n"
-            "Do you want to continue?",
-            QMessageBox.Yes | QMessageBox.No
-            )
+                                    self.DeleteContactsWindow,
+                                    "Confirm Delete",
+                                    f"This Contact will permanently delete:\n{name}\n\nRecovery is not guaranteed.\n"
+                                    "The creator is not responsible for lost contacts.\n\n"
+                                    "Do you want to continue?",
+                                    QMessageBox.Yes | QMessageBox.No
+                                    )
         
         if reply == QMessageBox.No:
             return
         
         self.LastDeletedContact = (contact_id,name, phone, email)
         self.RecentsContactTable.removeRow(row)
-        # self.OriginalNames.remove(name)
 
         contacts = self.Manager.LoadContactsJSON()
         
         for i, contact in enumerate(contacts):
+
             if contact.get("id") == contact_id:
                 self.Manager.DeleteContactJSON(index=i)
                 break
@@ -712,10 +733,10 @@ class ContactBookGUI():
 
         if not hasattr(self,"ImportedContacts") or not self.ImportedContacts:
             QMessageBox.warning(
-                self.ImportContactWindow,
-                "No File Selected",
-                "Please select a VCF file first."
-                )
+                                self.ImportContactWindow,
+                                "No File Selected",
+                                "Please select a VCF file first."
+                                )
             return
 
         if existing_contacts:
@@ -724,7 +745,12 @@ class ContactBookGUI():
         for contact in self.ImportedContacts:
             self.Manager.addContacts(id=newid,name=contact["name"],phone=contact["phone"],email=contact["email"])
             newid += 1
-        QMessageBox.information(self.ImportContactWindow,"Import Successful",f"{len(self.ImportedContacts)} contacts imported successfully.")
+        QMessageBox.information(
+                                self.ImportContactWindow,
+                                "Import Successful",
+                                f"{len(self.ImportedContacts)} contacts imported successfully."
+                                )
+        
         self.LoadContactsIntoTable()
         self.ImportContactWindow.close()
 
@@ -795,12 +821,14 @@ class ContactBookGUI():
         self.CloseButton.setStyleSheet(self.GreyButtonStyle)
         self.CloseButton.move(110,200)
         self.CloseButton.setDefault(True)
+        self.CloseButton.setCursor(Qt.PointingHandCursor)
         self.ViewContactsWindow.setWindowFlag(Qt.WindowCloseButtonHint, True)
 
         self.CloseShortcut = QShortcut(QKeySequence("Esc"), self.ViewContactsWindow)
         self.CloseShortcut.activated.connect(lambda: self.CloseButtonLogic(window=self.ViewContactsWindow))
 
         self.ViewContactsWindow.show()
+        self.DisableMaximizeButton(self.ViewContactsWindow)
 
     def DeleteContacts(self):
         DeleteData = self.GetSelectedRow()
@@ -869,6 +897,7 @@ class ContactBookGUI():
         self.CancelButton.resize(130,30)
         self.CancelButton.move(80,210)
         self.CancelButton.setStyleSheet(self.BlueButtonStyle)
+        self.CancelButton.setCursor(Qt.PointingHandCursor)
         self.CancelButton.clicked.connect(lambda: self.CloseButtonLogic(window=self.DeleteContactsWindow))
 
         #Delete Button
@@ -877,12 +906,14 @@ class ContactBookGUI():
         self.DeleteButton.resize(130,30)
         self.DeleteButton.move(240,210)
         self.DeleteButton.setStyleSheet(self.RedButtonStyle)
+        self.DeleteButton.setCursor(Qt.PointingHandCursor)
         self.DeleteButton.clicked.connect(self.DeleteSelectedContact)
 
         self.CloseShortcut = QShortcut(QKeySequence("Esc"), self.DeleteContactsWindow)
         self.CloseShortcut.activated.connect(lambda: self.DeleteContactsWindow.close())
 
         self.DeleteContactsWindow.show()
+        self.DisableMaximizeButton(self.DeleteContactsWindow)
 
     def AddContacts(self):
         self.AddContactWindow = QWidget()
@@ -894,16 +925,19 @@ class ContactBookGUI():
         self.CountryCodeContactDropdown = QComboBox(self.AddContactWindow)
         self.CountryCodeContactDropdown.move(160,120)
         self.CountryCodeContactDropdown.resize(120,35)
-        self.CountryCodeContactDropdown.addItems(["+61 Australia","+880 Bangladesh","+55 Brazil",
-                                                  "+86 China","+33 France","+49 Germany",
-                                                  "+91 India","+62 Indonesia","+39 Italy",
-                                                  "+81 Japan","+60 Malaysia","+52 Mexico",
-                                                  "+31 Netherlands","+64 New Zealand","+92 Pakistan",
-                                                  "+7 Russia","+966 Saudi Arabia","+65 Singapore",
-                                                  "+27 South Africa","+82 South Korea","+34 Spain",
-                                                  "+94 Sri Lanka","+971 UAE","+44 United Kingdom",
-                                                  "+1 USA / Canada"
-                                                  ])
+        self.CountryCodeContactDropdown.addItems(
+                                                    [
+                                                        "+61 Australia","+880 Bangladesh","+55 Brazil",
+                                                        "+86 China","+33 France","+49 Germany",
+                                                        "+91 India","+62 Indonesia","+39 Italy",
+                                                        "+81 Japan","+60 Malaysia","+52 Mexico",
+                                                        "+31 Netherlands","+64 New Zealand","+92 Pakistan",
+                                                        "+7 Russia","+966 Saudi Arabia","+65 Singapore",
+                                                        "+27 South Africa","+82 South Korea","+34 Spain",
+                                                        "+94 Sri Lanka","+971 UAE","+44 United Kingdom",
+                                                        "+1 USA / Canada"
+                                                    ]
+                                                )
         
         self.CountryCodeContactDropdown.setCurrentText("+91 India")
 
@@ -958,6 +992,7 @@ class ContactBookGUI():
         self.SaveButton.resize(130,30)
         self.SaveButton.setStyleSheet(self.BlueButtonStyle)
         self.SaveButton.move(280,210)
+        self.SaveButton.setCursor(Qt.PointingHandCursor)
         self.SaveButton.clicked.connect(self.SaveNewContact)
 
         #Cancel Button
@@ -966,9 +1001,11 @@ class ContactBookGUI():
         self.CancelButton.resize(130,30)
         self.CancelButton.move(100,210)
         self.CancelButton.setStyleSheet(self.RedButtonStyle)
+        self.CancelButton.setCursor(Qt.PointingHandCursor)
         self.CancelButton.clicked.connect(lambda: self.CancelWithWarning(self.AddContactWindow,"This contact has not been saved.\n\nIf you cancel now the entered data will be lost."))
 
         self.AddContactWindow.show()
+        self.DisableMaximizeButton(self.AddContactWindow)
 
     def EditContacts(self):
         EditData = self.GetSelectedRow()
@@ -1006,19 +1043,23 @@ class ContactBookGUI():
         self.CountryCodeContactDropdownforEdit = QComboBox(self.EditContactWindow)
         self.CountryCodeContactDropdownforEdit.move(160,120)
         self.CountryCodeContactDropdownforEdit.resize(120,35)
-        self.CountryCodeContactDropdownforEdit.addItems(["+61 Australia","+880 Bangladesh","+55 Brazil",
-                                                  "+86 China","+33 France","+49 Germany",
-                                                  "+91 India","+62 Indonesia","+39 Italy",
-                                                  "+81 Japan","+60 Malaysia","+52 Mexico",
-                                                  "+31 Netherlands","+64 New Zealand","+92 Pakistan",
-                                                  "+7 Russia","+966 Saudi Arabia","+65 Singapore",
-                                                  "+27 South Africa","+82 South Korea","+34 Spain",
-                                                  "+94 Sri Lanka","+971 UAE","+44 United Kingdom",
-                                                  "+1 USA / Canada"
-                                                  ])
+        self.CountryCodeContactDropdownforEdit.addItems(
+                                                            [
+                                                                "+61 Australia","+880 Bangladesh","+55 Brazil",
+                                                                "+86 China","+33 France","+49 Germany",
+                                                                "+91 India","+62 Indonesia","+39 Italy",
+                                                                "+81 Japan","+60 Malaysia","+52 Mexico",
+                                                                "+31 Netherlands","+64 New Zealand","+92 Pakistan",
+                                                                "+7 Russia","+966 Saudi Arabia","+65 Singapore",
+                                                                "+27 South Africa","+82 South Korea","+34 Spain",
+                                                                "+94 Sri Lanka","+971 UAE","+44 United Kingdom",
+                                                                "+1 USA / Canada"
+                                                            ]
+                                                        )
         
         self.CountryCodeContactDropdownforEdit.setCurrentText("+91 India")
         for i in range(self.CountryCodeContactDropdownforEdit.count()):
+
             if self.CountryCodeContactDropdownforEdit.itemText(i).startswith(code):
                 self.CountryCodeContactDropdownforEdit.setCurrentIndex(i)
                 break
@@ -1068,6 +1109,7 @@ class ContactBookGUI():
         self.SaveButton.resize(130,30)
         self.SaveButton.setStyleSheet(self.BlueButtonStyle)
         self.SaveButton.move(280,210)
+        self.SaveButton.setCursor(Qt.PointingHandCursor)
         self.SaveButton.clicked.connect(self.SaveEditedContact)
 
         #Cancel Button
@@ -1076,13 +1118,20 @@ class ContactBookGUI():
         self.CancelButton.resize(130,30)
         self.CancelButton.move(100,210)
         self.CancelButton.setStyleSheet(self.RedButtonStyle)
-        self.CancelButton.clicked.connect(lambda: self.CancelWithWarning(self.EditContactWindow,"Changes to this contact will not be saved.\n\nDo you want to discard"
-                                                                         " your edits?"))
+        self.CancelButton.setCursor(Qt.PointingHandCursor)
+        self.CancelButton.clicked.connect(
+                                            lambda: self.CancelWithWarning(
+                                                                                self.EditContactWindow,
+                                                                                "Changes to this contact will not be saved.\n\nDo you want to discard"
+                                                                                " your edits?"
+                                                                            )
+                                        )
         
         self.CloseShortcut = QShortcut(QKeySequence("Esc"), self.EditContactWindow)
         self.CloseShortcut.activated.connect(self.EditContactWindow.close)
 
         self.EditContactWindow.show()
+        self.DisableMaximizeButton(self.EditContactWindow)
 
     def ImportContacts(self):
 
@@ -1116,6 +1165,7 @@ class ContactBookGUI():
         self.ImportBrowseButton.resize(80,32)
         self.ImportBrowseButton.move(300,95)
         self.ImportBrowseButton.setStyleSheet(self.GreyButtonStyle)
+        self.ImportBrowseButton.setCursor(Qt.PointingHandCursor)
         self.ImportBrowseButton.clicked.connect(self.BrowseVCFFile)
 
         # Selected file label
@@ -1138,6 +1188,7 @@ class ContactBookGUI():
         self.ImportCancelButton.resize(80,32)
         self.ImportCancelButton.move(120,210)
         self.ImportCancelButton.setStyleSheet(self.RedButtonStyle)
+        self.ImportCancelButton.setCursor(Qt.PointingHandCursor)
         self.ImportCancelButton.clicked.connect(lambda:self.CancelWithWarning(window=self.ImportContactWindow,message="Import will be cancelled. \n\nNo contacts will be added to your contact book.\n\nDo you want to continue?"))
 
         # Import button
@@ -1146,6 +1197,7 @@ class ContactBookGUI():
         self.ImportButton.resize(80,32)
         self.ImportButton.move(220,210)
         self.ImportButton.setStyleSheet(self.BlueButtonStyle)
+        self.ImportButton.setCursor(Qt.PointingHandCursor)
         self.ImportButton.clicked.connect(self.ImportDetectedContacts)
 
         # ESC shortcut
@@ -1153,6 +1205,7 @@ class ContactBookGUI():
         self.CloseShortcut.activated.connect(lambda: self.ImportContactWindow.close)
 
         self.ImportContactWindow.show()
+        self.DisableMaximizeButton(self.ImportContactWindow)
 
     def ExportContacts(self):
         ExportingContacts = self.Manager.LoadContactsJSON()
@@ -1168,3 +1221,18 @@ class ContactBookGUI():
         
         self.Manager.ExportContactsToVCF(path)
         QMessageBox.information(self.MainWindow,"Export Successfully",f"{len(ExportingContacts)} contacts exported successfully.")
+
+    def DisableMaximizeButton(self, window):
+        hwnd = int(window.winId())
+        GWL_STYLE = -16
+        WS_MAXIMIZEBOX = 0x00010000
+
+        style = ctypes.windll.user32.GetWindowLongW(hwnd, GWL_STYLE)
+        style &= ~WS_MAXIMIZEBOX
+        ctypes.windll.user32.SetWindowLongW(hwnd, GWL_STYLE, style)
+        ctypes.windll.user32.SetWindowPos(
+                                            hwnd,
+                                            0,
+                                            0, 0, 0, 0,
+                                            0x0027
+                                        )
