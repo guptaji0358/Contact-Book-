@@ -142,52 +142,61 @@ class ImportExportMixin:
         self.ImportContactWindow.resize(420, 260)
         self.ImportContactWindow.setWindowIcon(QIcon(ICON_PATH))
 
+        MainLayout = QVBoxLayout(self.ImportContactWindow)
+        MainLayout.setContentsMargins(30, 15, 30, 15)
+        MainLayout.setSpacing(10)
+
         self.ImportContactLabel = QLabel(self.ImportContactWindow)
         self.ImportContactLabel.setText("Import Contacts")
         self.ImportContactLabel.setStyleSheet(DIALOG_TITLE_STYLE)
-        self.ImportContactLabel.move(130, 20)
+        self.ImportContactLabel.setAlignment(Qt.AlignCenter)
+        MainLayout.addWidget(self.ImportContactLabel)
 
         self.SelectFileLabel = QLabel(self.ImportContactWindow)
         self.SelectFileLabel.setText("Select file to import")
         self.SelectFileLabel.setStyleSheet("font-size:14px; font-family:'Segoe UI';")
-        self.SelectFileLabel.move(30, 65)
+        MainLayout.addWidget(self.SelectFileLabel)
 
+        PathRow = QHBoxLayout()
         self.ImportPathTextBox = QLineEdit(self.ImportContactWindow)
-        self.ImportPathTextBox.resize(260, 32)
-        self.ImportPathTextBox.move(30, 95)
+        self.ImportPathTextBox.setFixedHeight(32)
         self.ImportPathTextBox.setPlaceholderText("Enter or browse .vcf file path")
         self.ImportPathTextBox.setStyleSheet(INPUT_STYLE)
+        PathRow.addWidget(self.ImportPathTextBox, 1)
 
         self.ImportBrowseButton = QPushButton(self.ImportContactWindow)
         self.ImportBrowseButton.setText("Browse")
-        self.ImportBrowseButton.resize(80, 32)
-        self.ImportBrowseButton.move(300, 95)
+        self.ImportBrowseButton.setFixedSize(80, 32)
         self.ImportBrowseButton.setStyleSheet(GREY_BUTTON_STYLE)
         self.ImportBrowseButton.setCursor(Qt.PointingHandCursor)
         self.ImportBrowseButton.clicked.connect(self.BrowseVCFFile)
+        PathRow.addWidget(self.ImportBrowseButton)
 
-        self.ImportSelectedFileLabel = QLabel(self.ImportContactWindow)
-        self.ImportSelectedFileLabel.setText("Selected file: none")
-        self.ImportSelectedFileLabel.setStyleSheet("font-size:13px; font-family:'Segoe UI';")
-        self.ImportSelectedFileLabel.resize(300, 20)
-        self.ImportSelectedFileLabel.move(30, 140)
-
-        self.ImportDropHintLabel = QLabel(self.ImportContactWindow)
-        self.ImportDropHintLabel.setText("or drag & drop a .vcf file anywhere in this window")
-        self.ImportDropHintLabel.setStyleSheet("font-size:12px; font-family:'Segoe UI'; color:#888;")
-        self.ImportDropHintLabel.resize(360, 20)
-        self.ImportDropHintLabel.move(30, 190)
+        MainLayout.addLayout(PathRow)
 
         self.ImportContactDetectedLabel = QLabel(self.ImportContactWindow)
         self.ImportContactDetectedLabel.setText("Contacts detected: 0")
         self.ImportContactDetectedLabel.setStyleSheet("font-size:13px; font-family:'Segoe UI';")
-        self.ImportContactDetectedLabel.resize(300, 20)
-        self.ImportContactDetectedLabel.move(30, 170)
+        MainLayout.addWidget(self.ImportContactDetectedLabel)
+
+        self.ImportSelectedFileLabel = QLabel(self.ImportContactWindow)
+        self.ImportSelectedFileLabel.setText("Selected file: none")
+        self.ImportSelectedFileLabel.setStyleSheet("font-size:13px; font-family:'Segoe UI';")
+        MainLayout.addWidget(self.ImportSelectedFileLabel)
+
+        self.ImportDropHintLabel = QLabel(self.ImportContactWindow)
+        self.ImportDropHintLabel.setText("or drag & drop a .vcf file anywhere in this window")
+        self.ImportDropHintLabel.setStyleSheet("font-size:12px; font-family:'Segoe UI'; color:#888;")
+        MainLayout.addWidget(self.ImportDropHintLabel)
+
+        MainLayout.addStretch(1)
+
+        ButtonRow = QHBoxLayout()
+        ButtonRow.addStretch(1)
 
         self.ImportCancelButton = QPushButton(self.ImportContactWindow)
         self.ImportCancelButton.setText("Cancel")
-        self.ImportCancelButton.resize(80, 32)
-        self.ImportCancelButton.move(120, 210)
+        self.ImportCancelButton.setFixedSize(80, 32)
         self.ImportCancelButton.setStyleSheet(RED_BUTTON_STYLE)
         self.ImportCancelButton.setCursor(Qt.PointingHandCursor)
         self.ImportCancelButton.clicked.connect(
@@ -196,14 +205,17 @@ class ImportExportMixin:
                 message="Import will be cancelled. \n\nNo contacts will be added to your contact book.\n\nDo you want to continue?"
             )
         )
+        ButtonRow.addWidget(self.ImportCancelButton)
 
         self.ImportButton = QPushButton(self.ImportContactWindow)
         self.ImportButton.setText("Import")
-        self.ImportButton.resize(80, 32)
-        self.ImportButton.move(220, 210)
+        self.ImportButton.setFixedSize(80, 32)
         self.ImportButton.setStyleSheet(BLUE_BUTTON_STYLE)
         self.ImportButton.setCursor(Qt.PointingHandCursor)
         self.ImportButton.clicked.connect(self.ImportDetectedContacts)
+        ButtonRow.addWidget(self.ImportButton)
+
+        MainLayout.addLayout(ButtonRow)
 
         self.CloseShortcut = QShortcut(QKeySequence("Esc"), self.ImportContactWindow)
         self.CloseShortcut.activated.connect(lambda: self.ImportContactWindow.close)

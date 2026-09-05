@@ -116,35 +116,37 @@ class CallMixin:
         self.CallScreen.setStyleSheet("background-color:#111827;")
         self.CallScreen.setWindowFlag(Qt.WindowMaximizeButtonHint, False)
 
+        MainLayout = QVBoxLayout(self.CallScreen)
+        MainLayout.setContentsMargins(20, 40, 20, 30)
+        MainLayout.setSpacing(10)
+
         Initial = Name[0].upper() if Name else "?"
 
         self.CallAvatarLabel = QLabel(Initial, self.CallScreen)
-        self.CallAvatarLabel.resize(100, 100)
-        self.CallAvatarLabel.move(110, 40)
+        self.CallAvatarLabel.setFixedSize(100, 100)
         self.CallAvatarLabel.setAlignment(Qt.AlignCenter)
         self.CallAvatarLabel.setStyleSheet(
             "background-color:#2563EB; color:white; border-radius:50px; "
             "font-size:36px; font-family:'Segoe UI'; font-weight:bold;"
         )
+        MainLayout.addWidget(self.CallAvatarLabel, alignment=Qt.AlignHCenter)
+        MainLayout.addSpacing(10)
 
         self.CallNameLabel = QLabel(Name, self.CallScreen)
-        self.CallNameLabel.resize(300, 30)
-        self.CallNameLabel.move(10, 155)
         self.CallNameLabel.setAlignment(Qt.AlignCenter)
         self.CallNameLabel.setStyleSheet(DIALOG_LABEL_STYLE + "color:white;")
+        MainLayout.addWidget(self.CallNameLabel)
 
         self.CallNumberLabel = QLabel(PhoneNo, self.CallScreen)
-        self.CallNumberLabel.resize(300, 25)
-        self.CallNumberLabel.move(10, 185)
         self.CallNumberLabel.setAlignment(Qt.AlignCenter)
         self.CallNumberLabel.setStyleSheet("color:#9CA3AF; font-size:13px; font-family:'Segoe UI';")
+        MainLayout.addWidget(self.CallNumberLabel)
 
         StatusText = "Calling..." if voip else "Phone Link dialing in background"
         self.CallStatusLabel = QLabel(StatusText, self.CallScreen)
-        self.CallStatusLabel.resize(300, 25)
-        self.CallStatusLabel.move(10, 215)
         self.CallStatusLabel.setAlignment(Qt.AlignCenter)
         self.CallStatusLabel.setStyleSheet("color:#22C55E; font-size:14px; font-family:'Segoe UI'; font-weight:bold;")
+        MainLayout.addWidget(self.CallStatusLabel)
 
         self.CallSeconds = 0
         self.CallTimer = QTimer(self.CallScreen)
@@ -158,36 +160,44 @@ class CallMixin:
                 "Check your phone/Phone Link for the actual call status.\nThis window doesn't track that call.",
                 self.CallScreen
             )
-            self.CallNoteLabel.resize(280, 40)
-            self.CallNoteLabel.move(20, 245)
             self.CallNoteLabel.setAlignment(Qt.AlignCenter)
             self.CallNoteLabel.setWordWrap(True)
             self.CallNoteLabel.setStyleSheet("color:#9CA3AF; font-size:11px; font-family:'Segoe UI';")
+            MainLayout.addWidget(self.CallNoteLabel)
+
+        MainLayout.addStretch(1)
+
+        ButtonRow = QHBoxLayout()
+        ButtonRow.setSpacing(20)
+        ButtonRow.addStretch(1)
 
         self.MuteButton = self._make_round_call_button(
             self.CallScreen, ICON_MIC, "Mute", CALL_TOGGLE_BUTTON_STYLE, checkable=True
         )
-        self.MuteButton.move(50, 300)
         self.MuteButton.toggled.connect(self._ToggleMute)
         self.MuteButton.setEnabled(voip)
+        ButtonRow.addWidget(self.MuteButton)
 
         self.EndCallButton = self._make_round_call_button(
             self.CallScreen, ICON_END_CALL, "End Call", CALL_END_BUTTON_STYLE, size=64
         )
-        self.EndCallButton.move(128, 295)
         self.EndCallButton.clicked.connect(self._EndCall)
+        ButtonRow.addWidget(self.EndCallButton)
 
         self.SpeakerButton = self._make_round_call_button(
             self.CallScreen, ICON_SPEAKER, "Speaker", CALL_TOGGLE_BUTTON_STYLE, checkable=True
         )
-        self.SpeakerButton.move(220, 300)
         self.SpeakerButton.setEnabled(voip)
+        ButtonRow.addWidget(self.SpeakerButton)
+
+        ButtonRow.addStretch(1)
+        MainLayout.addLayout(ButtonRow)
 
         self.CallScreen.show()
 
     def _make_round_call_button(self, parent, icon_svg, tooltip, style, checkable=False, size=60):
         button = QPushButton(parent)
-        button.resize(size, size)
+        button.setFixedSize(size, size)
         button.setIcon(svg_icon(icon_svg, color="#ffffff", size=int(size * 0.4)))
         button.setIconSize(QSize(int(size * 0.4), int(size * 0.4)))
         button.setToolTip(tooltip)
