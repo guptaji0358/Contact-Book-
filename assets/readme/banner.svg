@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="900" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1220"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="badge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="900" height="200" rx="18" fill="url(#bg)"/>
+
+  <!-- badge -->
+  <rect x="36" y="50" width="100" height="100" rx="24" fill="url(#badge)"/>
+  <g transform="translate(62,74)" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="24" cy="16" r="10"/>
+    <path d="M4 48c0-13 9-22 20-22s20 9 20 22"/>
+    <path d="M46 10h8M46 20h8M46 30h6"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="164" y="102" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#ffffff">Contact Book</text>
+  <text x="166" y="132" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#9CA3AF">A local-first desktop address book, built with Python &amp; PySide6</text>
+
+  <!-- accent rule -->
+  <rect x="166" y="146" width="420" height="3" rx="1.5" fill="#2563EB"/>
+</svg>

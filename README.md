@@ -1,72 +1,112 @@
-# Contact-Book
-DAY - 42/100 - Project - Contact Book
-# 📒 Contact Book Desktop Application
+<div align="center">
 
-A **Desktop Contact Management Application** built using **Python and PySide6**.
+<img src="assets/readme/banner.svg" alt="Contact Book" width="720">
 
-It supports **multiple contact books, add/edit/delete/search, VCF import & export (including drag-and-drop), and LAN voice calling** between two devices both running Contact Book, all in a simple graphical interface.
+<br><br>
 
-Contacts are stored locally in **SQLite** databases — nothing is uploaded anywhere.
+[![Release](https://img.shields.io/github/v/release/guptaji0358/Contact-Book-?color=2563EB&label=release&style=flat-square)](https://github.com/guptaji0358/Contact-Book-/releases/latest)
+[![Python](https://img.shields.io/badge/python-3.11%2B-2563EB?logo=python&logoColor=white&style=flat-square)](https://www.python.org/)
+[![PySide6](https://img.shields.io/badge/UI-PySide6-2563EB?logo=qt&logoColor=white&style=flat-square)](https://doc.qt.io/qtforpython/)
+[![Platform](https://img.shields.io/badge/platform-Windows-2563EB?logo=windows&logoColor=white&style=flat-square)](#-installation)
+[![License](https://img.shields.io/badge/license-MIT-2563EB?style=flat-square)](#-license)
 
----
+**A local-first desktop address book** — multiple contact books, VCF import/export
+with drag-and-drop, and calling via Phone Link or direct LAN voice, all in a
+clean PySide6 GUI. Your contacts never leave your machine.
 
-# 📥 Download
+[Download](#-download) · [Features](#-features) · [Architecture](#-architecture) · [Build from source](#-installation)
 
-Grab the latest Windows installer from the [Releases page](https://github.com/guptaji0358/Contact-Book-/releases/latest) —
-download `ContactBookSetup.exe` and run it. It's a self-contained wizard
-(no Python install required) that installs per-user, creates shortcuts,
-and registers a proper uninstaller — see [Installation](#-installation) below
-for details and for running from source instead.
-
----
-
-# 🚀 Features
-
-## Contact Management
-
-- Add new contacts
-- Edit existing contacts
-- Delete contacts (with Undo)
-- Real-time search with highlighted matches
-
-## Multiple Contact Books
-
-- Keep separate books (e.g. personal, work) and switch between them
-- Create, rename, and delete books from the book selector
-
-## Import / Export
-
-- Import contacts from **VCF (.vcf)** files — browse, or just **drag and drop**
-  the file onto the Import window (with a pulsing drop-zone animation)
-- Detects the number of contacts before importing
-- Export contacts back to VCF, compatible with phone contact apps
-
-## Phone Validation
-
-- Country code support
-- Digit validation rules per country
-- Special rule for Japan numbers
-
-## Calling
-
-- Dial a contact's number through whatever app Windows has registered for
-  `tel:` links (e.g. Microsoft Phone Link, once you've linked your phone) —
-  the app hands the number off in the background without stealing focus
-- Or place a direct LAN voice call to another device also running Contact
-  Book, if that contact has a Device IP set
-
-## Data Storage
-
-Contacts are stored locally per-book in **SQLite** databases under `books/`.
-Nothing is synced or uploaded — see the installer's License & Data
-Agreement page for the full statement.
+</div>
 
 ---
 
-# 🏗 Project Architecture
+## 📥 Download
 
-The app is a `scripts/` package of PySide6 mixins, composed together in
-`ContactBookGUI`:
+<table>
+<tr>
+<td width="56"><img src="assets/readme/icon-download.svg" width="40"></td>
+<td>
+
+Grab the latest Windows installer from the **[Releases page](https://github.com/guptaji0358/Contact-Book-/releases/latest)**
+— download `ContactBookSetup.exe` and run it. No Python required.
+
+It's a self-contained wizard that installs per-user (no admin rights needed),
+creates Desktop/Start Menu shortcuts, and registers a proper uninstaller in
+"Add or Remove Programs". See [`installer/README.md`](installer/README.md)
+if you'd rather build it yourself.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Features
+
+<table>
+<tr>
+<td width="56" align="center"><img src="assets/readme/icon-books.svg" width="40"></td>
+<td width="45%">
+
+**Multiple Contact Books**
+Keep separate books (personal, work, whatever) and switch between them from
+the book selector. Create, rename, and delete on the fly.
+
+</td>
+<td width="56" align="center"><img src="assets/readme/icon-search.svg" width="40"></td>
+<td>
+
+**Fast, Live Search**
+Filter contacts as you type, with the matching part of the name
+highlighted — plus undo for accidental deletes.
+
+</td>
+</tr>
+<tr>
+<td align="center"><img src="assets/readme/icon-import.svg" width="40"></td>
+<td>
+
+**VCF Import & Export**
+Import from `.vcf` — browse, or just **drag and drop** the file onto the
+window (with a pulsing drop-zone animation). Export back out anytime.
+
+</td>
+<td align="center"><img src="assets/readme/icon-call.svg" width="40"></td>
+<td>
+
+**Calling**
+Hand a number off to Phone Link (`tel:` links) for a real cellular call,
+or place a direct LAN voice call to another device also running Contact
+Book.
+
+</td>
+</tr>
+<tr>
+<td align="center"><img src="assets/readme/icon-lock.svg" width="40"></td>
+<td>
+
+**Local-Only Storage**
+Every contact lives in a SQLite file on your disk. Nothing is uploaded,
+synced, or phoned home — ever.
+
+</td>
+<td align="center"><img src="assets/readme/icon-installer.svg" width="40"></td>
+<td>
+
+**Real Windows Installer**
+A custom-built PySide6 install wizard with its own license/data agreement
+page, progress bar, and a proper GUI uninstaller.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗 Architecture
+
+The app is a `scripts/` package of PySide6 mixins, composed together into
+one `ContactBookGUI` class:
 
 ```
 42_CONTACT_BOOK.py          entry point
@@ -81,36 +121,47 @@ scripts/
 ├── voip_engine.py          LAN voice calling (sockets + sounddevice)
 ├── books_ui.py / books_registry.py   multiple contact books
 ├── phone_rules.py          country codes & validation
-├── icons.py / styles.py    SVG icons & Qt stylesheets
+└── icons.py / styles.py    SVG icons & Qt stylesheets
 ```
 
-Each contact book is its own SQLite file under `books/`, tracked in a
-small registry database (`CONTACT_BOOKS.db`) that maps book name -> file.
+Each contact book is its own SQLite file under `books/`, tracked in a small
+registry database (`CONTACT_BOOKS.db`) that maps book name → file path.
 
 ---
 
-# 🧰 Technologies Used
+## 🧰 Tech Stack
+
+<div align="left">
+
+![Python](https://img.shields.io/badge/Python-language-2563EB?logo=python&logoColor=white&style=flat-square)
+![PySide6](https://img.shields.io/badge/PySide6-GUI-2563EB?logo=qt&logoColor=white&style=flat-square)
+![SQLite](https://img.shields.io/badge/SQLite-storage-2563EB?logo=sqlite&logoColor=white&style=flat-square)
+![sounddevice](https://img.shields.io/badge/sounddevice-audio-2563EB?style=flat-square)
+![pywin32](https://img.shields.io/badge/pywin32-Windows%20shortcuts-2563EB?style=flat-square)
+![PyInstaller](https://img.shields.io/badge/PyInstaller-packaging-2563EB?style=flat-square)
+
+</div>
 
 | Technology | Purpose |
-|-----------|---------|
+|---|---|
 | Python | Programming language |
-| PySide6 | GUI framework |
+| PySide6 | GUI framework (Qt for Python) |
 | SQLite | Per-book contact storage |
 | sounddevice / numpy | LAN voice calling audio |
 | pywin32 | Windows shortcuts (installer) |
-| PyInstaller | Freezing the app into an .exe |
+| PyInstaller | Freezing the app into an `.exe` |
 | VCF | Contact import/export format |
 
 ---
 
-# ⚙ Installation
+## ⚙ Installation
 
-## Option A: Download the installer (recommended)
+### Option A — Download the installer (recommended)
 
-Download `ContactBookSetup.exe` from the [latest release](https://github.com/guptaji0358/Contact-Book-/releases/latest)
-and run it. See `installer/README.md` if you want to build it yourself.
+Download `ContactBookSetup.exe` from the **[latest release](https://github.com/guptaji0358/Contact-Book-/releases/latest)**
+and run it.
 
-## Option B: Run from source
+### Option B — Run from source
 
 ```bash
 git clone https://github.com/guptaji0358/Contact-Book-.git
@@ -121,9 +172,7 @@ python 42_CONTACT_BOOK.py
 
 ---
 
-# 📥 Import Example
-
-Example VCF format:
+## 📥 Import Example
 
 ```
 BEGIN:VCARD
@@ -134,17 +183,13 @@ EMAIL:naruto@leaf.com
 END:VCARD
 ```
 
-During import the application shows detection:
+The Import window shows how many contacts it detected before you commit:
 
 ```
 Contacts detected: 25
 ```
 
----
-
-# 📤 Export Example
-
-Exported contact format:
+## 📤 Export Example
 
 ```
 BEGIN:VCARD
@@ -157,41 +202,22 @@ END:VCARD
 
 ---
 
-# 🔍 Search
+## 🔓 Customization & Contributions
 
-The application supports **dynamic search filtering** across name, phone,
-and email, with the matching part of the name highlighted.
-
----
-
-# 🔓 Customization & Contributions
-
-This project is open for customization and learning.
-
-Anyone can download the source code and modify it according to their needs.
-
-Possible things you can do:
+This project is open for customization and learning. Fork it, poke at it,
+break it, rebuild it — ideas welcome:
 
 - Improve the UI
 - Add new features
 - Change validation rules
 - Extend import/export formats
 
-If you have ideas or improvements, feel free to modify the project or suggest enhancements.
-
-This project is meant for **learning, experimentation, and further development**.
-
 ---
 
-# 👨‍💻 Author
+## 👨‍💻 Author
 
-Robin Gupta
+**Robin Gupta** — Python developer, learning desktop GUI development.
 
-Python Developer
-Learning Desktop GUI Development
-
----
-
-# 📜 License
+## 📜 License
 
 MIT License
