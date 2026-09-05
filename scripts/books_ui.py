@@ -99,7 +99,7 @@ class BooksMixin:
             QMessageBox.Yes | QMessageBox.No
         )
 
-        if reply == QMessageBox.No:
+        if reply != QMessageBox.Yes:
             return
 
         DeleteBook(self.ActiveBookID)
