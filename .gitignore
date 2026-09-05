@@ -4,6 +4,7 @@ build/
 dist/
 *.spec
 !installer/ContactBook.spec
+!installer/pyside_installer.spec
 CONTACT_BOOK_CONTACTS.json
 out/
 installer/Output/
