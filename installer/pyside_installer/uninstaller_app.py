@@ -145,17 +145,32 @@ class UninstallWindow(QWidget):
         remove_shortcuts()
         remove_registry_entry()
 
+        # Show (and let the user dismiss) the confirmation BEFORE scheduling
+        # the self-delete below. This dialog blocks until clicked, and while
+        # it's up this exe is still running - so if the delete had already
+        # been scheduled at this point, it would fire and find Uninstall.exe
+        # itself still locked, deleting everything else but leaving that one
+        # file behind (the exact bug this ordering fixes).
+        QMessageBox.information(self, "Uninstalled", f"{APP_NAME} has been uninstalled.")
+
         # This exe can't delete its own containing folder while running, so
-        # hand off a delayed delete to a background cmd process and exit; the
-        # file lock on this exe is released by the time the delay elapses.
-        # `ping` is used for the delay (not `timeout`, which needs a console
-        # and silently no-ops without one). DETACHED_PROCESS is deliberately
-        # NOT combined with shell=True here - together they made the spawned
-        # cmd exit without ever running rmdir.
-        delete_cmd = f'cmd /c ping -n 3 127.0.0.1 >nul & rmdir /s /q "{target_dir}"'
+        # hand off a delayed, retrying delete to a background cmd process and
+        # exit immediately after - `self.close()` below returns control to
+        # Qt's event loop essentially at once, releasing this exe's file lock
+        # well within the first retry. `ping` is used for the delay (not
+        # `timeout`, which needs a console and silently no-ops without one).
+        # The retry loop (rather than one fixed delay) also covers PyInstaller
+        # onefile's bootloader-parent + child process teardown taking longer
+        # than expected, e.g. under antivirus scanning. DETACHED_PROCESS is
+        # deliberately NOT combined with shell=True here - together they
+        # silently made the spawned cmd exit without ever running rmdir.
+        delete_cmd = (
+            'cmd /c "ping -n 2 127.0.0.1 >nul & '
+            f'for /l %n in (1,1,30) do (rmdir /s /q \"{target_dir}\" 2>nul & '
+            f'if not exist \"{target_dir}\" exit /b 0 & ping -n 2 127.0.0.1 >nul)"'
+        )
         subprocess.Popen(delete_cmd, shell=True, creationflags=subprocess.CREATE_NO_WINDOW)
 
-        QMessageBox.information(self, "Uninstalled", f"{APP_NAME} has been uninstalled.")
         self.close()
 
 
