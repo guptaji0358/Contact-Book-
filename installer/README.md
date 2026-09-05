@@ -22,19 +22,36 @@ build before packaging it.
 
 ## 2a. Build the PySide6 installer (recommended)
 
-Needs `pywin32` for shortcut creation (`pip install pywin32`). Then:
+Needs `pywin32` for shortcut creation (`pip install pywin32`). Build order:
 
 ```bash
+python -m PyInstaller installer/uninstaller.spec --distpath dist --workpath build --noconfirm
 python -m PyInstaller installer/pyside_installer.spec --distpath dist --workpath build --noconfirm
 ```
 
-This bundles `dist/ContactBook` as the installer's payload and produces a
-single `dist/ContactBookSetup.exe` — a self-contained wizard (welcome ->
-choose folder/shortcuts -> progress bar -> finish) that copies the app,
-creates Desktop/Start Menu shortcuts, and registers an uninstall entry
-(`uninstall.bat`, listed in "Add or Remove Programs" via the registry).
+The first command freezes `pyside_installer/uninstaller_app.py` into
+`dist/Uninstall.exe`. The second bundles `dist/ContactBook` *and*
+`dist/Uninstall.exe` as the installer's payload, producing a single
+`dist/ContactBookSetup.exe` — a wizard with its own dark, branded UI
+(a step sidebar + status bar, not Inno Setup's default look):
 
-The spec fails fast with a clear error if step 1 hasn't been run yet.
+1. **Welcome**
+2. **License & Data Agreement** — states that contacts are stored locally
+   only, that the app is a "rough book" and can't place real calls on its
+   own, and that Phone Link must be set up separately for that. Next is
+   disabled until the user checks "I agree".
+3. **Options** — install folder, Desktop/Start Menu shortcut checkboxes
+4. **Installing** — live progress bar + per-file status
+5. **Finish** — optional "launch now"
+
+It installs `Uninstall.exe` alongside the app and registers it (not a
+`.bat`) as the "Add or Remove Programs" uninstall entry — running it kills
+the app if open, removes shortcuts and the registry entry, then deletes
+the install folder itself via a short delayed background command (since an
+exe can't delete its own containing folder while running).
+
+Both specs fail fast with a clear error if their prerequisite build hasn't
+run yet.
 
 ## 2b. Build the Inno Setup installer (fallback)
 

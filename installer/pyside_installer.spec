@@ -5,17 +5,25 @@
 #
 # Build order:
 #   1. python -m PyInstaller installer/ContactBook.spec --distpath dist --workpath build
-#   2. python -m PyInstaller installer/pyside_installer.spec --distpath dist --workpath build
+#   2. python -m PyInstaller installer/uninstaller.spec --distpath dist --workpath build
+#   3. python -m PyInstaller installer/pyside_installer.spec --distpath dist --workpath build
 
 import os
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(SPEC), ".."))
 FROZEN_APP_DIR = os.path.join(PROJECT_ROOT, "dist", "ContactBook")
+UNINSTALLER_EXE = os.path.join(PROJECT_ROOT, "dist", "Uninstall.exe")
 
 if not os.path.isdir(FROZEN_APP_DIR):
     raise SystemExit(
         f"Frozen app not found at {FROZEN_APP_DIR}. "
         "Build installer/ContactBook.spec first."
+    )
+
+if not os.path.isfile(UNINSTALLER_EXE):
+    raise SystemExit(
+        f"Uninstaller not found at {UNINSTALLER_EXE}. "
+        "Build installer/uninstaller.spec first."
     )
 
 a = Analysis(
@@ -25,6 +33,7 @@ a = Analysis(
     datas=[
         (FROZEN_APP_DIR, "payload"),
         (os.path.join(PROJECT_ROOT, "CONTACT_BOOK_ICON.ico"), "payload"),
+        (UNINSTALLER_EXE, "payload"),
     ],
     hiddenimports=["win32com.client", "winreg"],
     hookspath=[],
