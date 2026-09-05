@@ -7,7 +7,7 @@ BOOKS_DIR = "books"
 
 
 def _Connect():
-    conn = sqlite3.connect(REGISTRY_DB)
+    conn = sqlite3.connect(REGISTRY_DB, timeout=2)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS books (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -43,39 +43,47 @@ def CreateBook(name):
         file_path = os.path.join(BOOKS_DIR, f"{file_stub}_{suffix}.db")
 
     conn = _Connect()
-    conn.execute("INSERT INTO books (name, file_path) VALUES (?, ?)", (name, file_path))
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute("INSERT INTO books (name, file_path) VALUES (?, ?)", (name, file_path))
+        conn.commit()
+    finally:
+        conn.close()
 
     schema_conn = sqlite3.connect(file_path)
-    schema_conn.execute("""
-        CREATE TABLE IF NOT EXISTS contacts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            email TEXT NOT NULL,
-            device_ip TEXT DEFAULT ''
-        )
-    """)
-    schema_conn.commit()
-    schema_conn.close()
+    try:
+        schema_conn.execute("""
+            CREATE TABLE IF NOT EXISTS contacts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                phone TEXT NOT NULL,
+                email TEXT NOT NULL,
+                device_ip TEXT DEFAULT ''
+            )
+        """)
+        schema_conn.commit()
+    finally:
+        schema_conn.close()
 
     return {"name": name, "file_path": file_path}
 
 
 def RenameBook(book_id, new_name):
     conn = _Connect()
-    conn.execute("UPDATE books SET name=? WHERE id=?", (new_name, book_id))
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute("UPDATE books SET name=? WHERE id=?", (new_name, book_id))
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def DeleteBook(book_id):
     conn = _Connect()
-    row = conn.execute("SELECT file_path FROM books WHERE id=?", (book_id,)).fetchone()
-    conn.execute("DELETE FROM books WHERE id=?", (book_id,))
-    conn.commit()
-    conn.close()
+    try:
+        row = conn.execute("SELECT file_path FROM books WHERE id=?", (book_id,)).fetchone()
+        conn.execute("DELETE FROM books WHERE id=?", (book_id,))
+        conn.commit()
+    finally:
+        conn.close()
 
     if row and os.path.exists(row[0]):
         os.remove(row[0])
