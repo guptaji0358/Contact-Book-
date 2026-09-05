@@ -9,6 +9,7 @@
 [![PySide6](https://img.shields.io/badge/UI-PySide6-2563EB?logo=qt&logoColor=white&style=flat-square)](https://doc.qt.io/qtforpython/)
 [![Platform](https://img.shields.io/badge/platform-Windows-2563EB?logo=windows&logoColor=white&style=flat-square)](#-installation)
 [![License](https://img.shields.io/badge/license-MIT-2563EB?style=flat-square)](#-license)
+[![Built with Claude Code](https://img.shields.io/badge/built%20with-Claude%20Code-2563EB?logo=anthropic&logoColor=white&style=flat-square)](https://claude.com/claude-code)
 
 **A local-first desktop address book** — multiple contact books, VCF import/export
 with drag-and-drop, and calling via Phone Link or direct LAN voice, all in a
@@ -217,6 +218,8 @@ break it, rebuild it — ideas welcome:
 ## 👨‍💻 Author
 
 **Robin Gupta** — Python developer, learning desktop GUI development.
+
+Built with [Claude Code](https://claude.com/claude-code) as an AI pair-programming assistant.
 
 ## 📜 License
 
