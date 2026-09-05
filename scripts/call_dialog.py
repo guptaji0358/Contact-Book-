@@ -6,11 +6,24 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 
-from scripts.styles import DIALOG_LABEL_STYLE, CALL_TOGGLE_BUTTON_STYLE, CALL_END_BUTTON_STYLE
-from scripts.icons import svg_icon, ICON_MIC, ICON_MIC_OFF, ICON_SPEAKER, ICON_END_CALL
+from scripts.styles import DIALOG_LABEL_STYLE
 from scripts.voip_engine import VoipEngine
 
 ICON_PATH = "CONTACT_BOOK_ICON.png"
+
+
+class CallScreenWidget(QWidget):
+    """A QWidget that reports when it is closed, so ending a call by
+    closing the window cleans up VOIP resources the same as an explicit
+    End Call action would."""
+
+    def __init__(self, on_closed, parent=None):
+        super().__init__(parent)
+        self.on_closed = on_closed
+
+    def closeEvent(self, event):
+        self.on_closed()
+        super().closeEvent(event)
 
 
 class CallMixin:
@@ -108,8 +121,9 @@ class CallMixin:
 
     def _OpenCallScreen(self, Name, PhoneNo, voip):
         self.CallIsVoip = voip
+        self._CallEnded = False
 
-        self.CallScreen = QWidget()
+        self.CallScreen = CallScreenWidget(on_closed=self._EndCall)
         self.CallScreen.setWindowTitle("Ongoing Call")
         self.CallScreen.resize(320, 420)
         self.CallScreen.setWindowIcon(QIcon(ICON_PATH))
@@ -167,51 +181,7 @@ class CallMixin:
 
         MainLayout.addStretch(1)
 
-        ButtonRow = QHBoxLayout()
-        ButtonRow.setSpacing(20)
-        ButtonRow.addStretch(1)
-
-        self.MuteButton = self._make_round_call_button(
-            self.CallScreen, ICON_MIC, "Mute", CALL_TOGGLE_BUTTON_STYLE, checkable=True
-        )
-        self.MuteButton.toggled.connect(self._ToggleMute)
-        self.MuteButton.setEnabled(voip)
-        ButtonRow.addWidget(self.MuteButton)
-
-        self.EndCallButton = self._make_round_call_button(
-            self.CallScreen, ICON_END_CALL, "End Call", CALL_END_BUTTON_STYLE, size=64
-        )
-        self.EndCallButton.clicked.connect(self._EndCall)
-        ButtonRow.addWidget(self.EndCallButton)
-
-        self.SpeakerButton = self._make_round_call_button(
-            self.CallScreen, ICON_SPEAKER, "Speaker", CALL_TOGGLE_BUTTON_STYLE, checkable=True
-        )
-        self.SpeakerButton.setEnabled(voip)
-        ButtonRow.addWidget(self.SpeakerButton)
-
-        ButtonRow.addStretch(1)
-        MainLayout.addLayout(ButtonRow)
-
         self.CallScreen.show()
-
-    def _make_round_call_button(self, parent, icon_svg, tooltip, style, checkable=False, size=60):
-        button = QPushButton(parent)
-        button.setFixedSize(size, size)
-        button.setIcon(svg_icon(icon_svg, color="#ffffff", size=int(size * 0.4)))
-        button.setIconSize(QSize(int(size * 0.4), int(size * 0.4)))
-        button.setToolTip(tooltip)
-        button.setStyleSheet(style)
-        button.setCursor(Qt.PointingHandCursor)
-        button.setCheckable(checkable)
-        return button
-
-    def _ToggleMute(self, checked):
-        icon = ICON_MIC_OFF if checked else ICON_MIC
-        self.MuteButton.setIcon(svg_icon(icon, color="#ffffff", size=24))
-
-        if getattr(self, "CallIsVoip", False):
-            self.Voip.SetMuted(checked)
 
     def _MarkCallConnected(self):
         self.CallStatusLabel.setText("Connected")
@@ -224,6 +194,10 @@ class CallMixin:
         self.CallStatusLabel.setText(f"{minutes:02d}:{seconds:02d}")
 
     def _EndCall(self):
+        if getattr(self, "_CallEnded", False):
+            return
+        self._CallEnded = True
+
         self.CallTimer.stop()
 
         if hasattr(self, "CallConnectTimer"):
