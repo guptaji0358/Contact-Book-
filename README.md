@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/readme/banner.png" alt="Contact Book" width="720">
+<img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/banner.png" alt="Contact Book" width="720">
 
 <br><br>
 
@@ -24,7 +24,7 @@ clean PySide6 GUI. Your contacts never leave your machine.
 
 <table>
 <tr>
-<td width="56"><img src="assets/readme/icon-download.png" width="40"></td>
+<td width="56"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-download.png" width="40"></td>
 <td>
 
 Grab the latest Windows installer from the **[Releases page](https://github.com/guptaji0358/Contact-Book-/releases/latest)**
@@ -45,7 +45,7 @@ if you'd rather build it yourself.
 
 <table>
 <tr>
-<td width="56" align="center"><img src="assets/readme/icon-books.png" width="40"></td>
+<td width="56" align="center"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-books.png" width="40"></td>
 <td width="45%">
 
 **Multiple Contact Books**
@@ -53,7 +53,7 @@ Keep separate books (personal, work, whatever) and switch between them from
 the book selector. Create, rename, and delete on the fly.
 
 </td>
-<td width="56" align="center"><img src="assets/readme/icon-search.png" width="40"></td>
+<td width="56" align="center"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-search.png" width="40"></td>
 <td>
 
 **Fast, Live Search**
@@ -63,7 +63,7 @@ highlighted — plus undo for accidental deletes.
 </td>
 </tr>
 <tr>
-<td align="center"><img src="assets/readme/icon-import.png" width="40"></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-import.png" width="40"></td>
 <td>
 
 **VCF Import & Export**
@@ -71,7 +71,7 @@ Import from `.vcf` — browse, or just **drag and drop** the file onto the
 window (with a pulsing drop-zone animation). Export back out anytime.
 
 </td>
-<td align="center"><img src="assets/readme/icon-call.png" width="40"></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-call.png" width="40"></td>
 <td>
 
 **Calling**
@@ -82,7 +82,7 @@ Book.
 </td>
 </tr>
 <tr>
-<td align="center"><img src="assets/readme/icon-lock.png" width="40"></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-lock.png" width="40"></td>
 <td>
 
 **Local-Only Storage**
@@ -90,7 +90,7 @@ Every contact lives in a SQLite file on your disk. Nothing is uploaded,
 synced, or phoned home — ever.
 
 </td>
-<td align="center"><img src="assets/readme/icon-installer.png" width="40"></td>
+<td align="center"><img src="https://cdn.jsdelivr.net/gh/guptaji0358/Contact-Book-@main/assets/readme/icon-installer.png" width="40"></td>
 <td>
 
 **Real Windows Installer**
