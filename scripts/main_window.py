@@ -22,7 +22,7 @@ class MainWindowMixin:
         button = QPushButton(parent)
         button.setIcon(svg_icon(icon_svg, color="#ffffff", size=BUTTON_ICON_SIZE))
         button.setIconSize(QSize(BUTTON_ICON_SIZE, BUTTON_ICON_SIZE))
-        button.resize(60, 50)
+        button.setFixedSize(60, 50)
         button.setToolTip(tooltip)
         button.setStyleSheet(style)
         button.setCursor(Qt.PointingHandCursor)
@@ -40,33 +40,42 @@ class MainWindowMixin:
         self.InitBooks()
         self.Manager = ContactBookManager(db_path=self.ActiveBookPath)
 
+        MainLayout = QVBoxLayout(self.MainWindow)
+        MainLayout.setContentsMargins(20, 20, 20, 20)
+        MainLayout.setSpacing(15)
+
+        TopRow = QHBoxLayout()
+        TopRow.setSpacing(10)
+
         self.SearchEngineofContactsLabel = QLabel(self.MainWindow)
-        self.SearchEngineofContactsLabel.resize(60, 25)
         self.SearchEngineofContactsLabel.setText("Search -->")
-        self.SearchEngineofContactsLabel.move(20, 20)
+        TopRow.addWidget(self.SearchEngineofContactsLabel)
 
         self.SearchEngineofContacts = QLineEdit(self.MainWindow)
-        self.SearchEngineofContacts.resize(150, 35)
+        self.SearchEngineofContacts.setFixedHeight(35)
         self.SearchEngineofContacts.setStyleSheet(INPUT_STYLE)
         self.SearchEngineofContacts.setPlaceholderText("Search Contacts")
-        self.SearchEngineofContacts.move(80, 20)
         self.SearchEngineofContacts.textChanged.connect(self.FilterContacts)
         self.SearchEngineofContacts.setClearButtonEnabled(True)
+        TopRow.addWidget(self.SearchEngineofContacts, 1)
 
         self.BookSelector = QComboBox(self.MainWindow)
-        self.BookSelector.resize(180, 35)
-        self.BookSelector.move(260, 20)
+        self.BookSelector.setFixedHeight(35)
+        self.BookSelector.setMinimumWidth(180)
         self.BookSelector.setStyleSheet(INPUT_STYLE)
         self.BookSelector.setContextMenuPolicy(Qt.CustomContextMenu)
         self.BookSelector.customContextMenuRequested.connect(self.ShowBookContextMenu)
         self.RefreshBookSelector()
         self.BookSelector.currentIndexChanged.connect(self.SwitchActiveBook)
+        TopRow.addWidget(self.BookSelector)
 
         self.NewBookButton = self._make_icon_button(
             self.MainWindow, ICON_BOOK, "New Book", ICON_GREY_BUTTON_STYLE, self.CreateNewBook
         )
-        self.NewBookButton.resize(40, 35)
-        self.NewBookButton.move(450, 20)
+        self.NewBookButton.setFixedSize(40, 35)
+        TopRow.addWidget(self.NewBookButton)
+
+        MainLayout.addLayout(TopRow)
 
         self.RecentsContactTable = QTableWidget(self.MainWindow)
         self.RecentsContactTable.setShowGrid(False)
@@ -74,8 +83,6 @@ class MainWindowMixin:
         self.RecentsContactTable.setFocusPolicy(Qt.NoFocus)
         self.RecentsContactTable.setColumnCount(4)
         self.RecentsContactTable.setHorizontalHeaderLabels(["", "Name", "Phone No.", "Email"])
-        self.RecentsContactTable.resize(650, 300)
-        self.RecentsContactTable.move(20, 80)
         self.RecentsContactTable.verticalHeader().setVisible(False)
         self.RecentsContactTable.setColumnWidth(0, 35)
         self.RecentsContactTable.horizontalHeader().setSectionResizeMode(0, QHeaderView.Fixed)
@@ -89,46 +96,54 @@ class MainWindowMixin:
         self.RecentsContactTable.setAlternatingRowColors(True)
         self.RecentsContactTable.setRowCount(0)
         self.RecentsContactTable.setStyleSheet(TABLE_STYLE)
+        MainLayout.addWidget(self.RecentsContactTable, 1)
 
         self.SelectedRow = None
         self.LastDeletedContact = None
         self.LoadContactsIntoTable()
         self.InitVoipEngine()
 
+        ButtonRow = QHBoxLayout()
+        ButtonRow.setSpacing(10)
+        ButtonRow.addStretch(1)
+
         self.ViewContactButton = self._make_icon_button(
             self.MainWindow, ICON_EYE, "View Contacts", ICON_BLUE_BUTTON_STYLE, self.ViewContacts
         )
-        self.ViewContactButton.move(130, 440)
+        ButtonRow.addWidget(self.ViewContactButton)
 
         self.AddContactButton = self._make_icon_button(
             self.MainWindow, ICON_PLUS, "Add Contacts", ICON_BLUE_BUTTON_STYLE, self.AddContacts
         )
-        self.AddContactButton.move(200, 440)
+        ButtonRow.addWidget(self.AddContactButton)
 
         self.EditContactButton = self._make_icon_button(
             self.MainWindow, ICON_PENCIL, "Edit Contacts", ICON_BLUE_BUTTON_STYLE, self.EditContacts
         )
-        self.EditContactButton.move(270, 440)
+        ButtonRow.addWidget(self.EditContactButton)
 
         self.DeleteContactButton = self._make_icon_button(
             self.MainWindow, ICON_TRASH, "Delete Contacts", ICON_RED_BUTTON_STYLE, self.DeleteContacts
         )
-        self.DeleteContactButton.move(340, 440)
+        ButtonRow.addWidget(self.DeleteContactButton)
 
         self.ImportContactButton = self._make_icon_button(
             self.MainWindow, ICON_CLOUD_DOWN, "Import Contacts", ICON_GREY_BUTTON_STYLE, self.ImportContacts
         )
-        self.ImportContactButton.move(410, 440)
+        ButtonRow.addWidget(self.ImportContactButton)
 
         self.ExportContactButton = self._make_icon_button(
             self.MainWindow, ICON_CLOUD_UP, "Export Contacts", ICON_GREY_BUTTON_STYLE, self.ExportContacts
         )
-        self.ExportContactButton.move(480, 440)
+        ButtonRow.addWidget(self.ExportContactButton)
 
         self.CallContactButton = self._make_icon_button(
             self.MainWindow, ICON_PHONE, "Call Contact", ICON_GREEN_BUTTON_STYLE, self.CallContact
         )
-        self.CallContactButton.move(550, 440)
+        ButtonRow.addWidget(self.CallContactButton)
+
+        ButtonRow.addStretch(1)
+        MainLayout.addLayout(ButtonRow)
 
         self.MainWindow.show()
         self.DisableMaximizeButton(self.MainWindow)
