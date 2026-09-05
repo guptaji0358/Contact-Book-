@@ -234,35 +234,107 @@
     font-family:var(--mono);
   }
 
-  /* ---------- cover art: a stack of index cards ---------- */
-  .card-stack{ position:relative; height:340px; }
-  .idx-card{
-    position:absolute;
-    width:280px;
-    background:var(--surface-2);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:18px 20px;
+  /* ---------- app-mock: a pixel-accurate replica of the real PySide6 window ----------
+     Colors and sizes are pulled straight from scripts/styles.py and
+     main_window.py, not invented - Segoe UI, the exact button hex codes,
+     the exact dark table on a light window. */
+  :root{
+    --win-bg:#f0f0f0;
+    --win-input-bg:#ffffff;
+    --win-border:#cccccc;
+    --win-text:#1a1a1a;
+    --win-table-bg:#2b2b2b;
+    --win-table-alt:#323232;
+    --win-header-bg:#1f1f1f;
+    --win-btn-blue-bg:#1F2A44; --win-btn-blue-border:#2563EB;
+    --win-btn-grey-bg:#262b33; --win-btn-grey-border:#374151;
+    --win-btn-red-bg:#3A1E1E;  --win-btn-red-border:#EF4444;
+    --win-btn-green-bg:#1B3A2A; --win-btn-green-border:#22C55E;
+  }
+  .app-mock{
+    font-family:"Segoe UI", var(--sans);
+    background:var(--win-bg);
+    border-radius:8px;
     box-shadow:var(--shadow);
+    overflow:hidden;
+    border:1px solid #00000022;
+    max-width:460px;
   }
-  .idx-card .tab{
-    position:absolute; top:-11px; left:20px;
-    background:var(--tab);
-    color:#231404;
-    font-family:var(--mono);
-    font-size:11px; font-weight:500;
-    letter-spacing:0.06em;
-    padding:3px 10px;
-    border-radius:4px;
+  .app-titlebar{
+    display:flex; align-items:center; gap:8px;
+    padding:8px 12px;
+    background:#e2e2e2;
+    border-bottom:1px solid #00000014;
   }
-  .idx-card h4{
-    margin:6px 0 4px; font-family:var(--serif); font-size:19px; font-weight:600;
+  .app-titlebar .dot{ width:15px; height:15px; opacity:0; } /* Windows chrome has no colored dots; spacer only */
+  .app-titlebar .app-icon{ width:16px; height:16px; border-radius:3px; background:linear-gradient(155deg, var(--accent-strong), var(--accent)); flex:none; }
+  .app-titlebar .app-title{ font-size:12.5px; color:#3a3a3a; }
+  .app-titlebar .win-controls{ margin-left:auto; display:flex; gap:14px; color:#5a5a5a; font-size:13px; }
+  .app-body{ padding:16px; }
+  .app-toprow{ display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .app-toprow .lbl{ font-size:12.5px; color:var(--win-text); white-space:nowrap; }
+  .app-search{
+    flex:1; height:26px; border-radius:5px;
+    border:1.5px solid var(--win-border); background:var(--win-input-bg);
+    display:flex; align-items:center; padding:0 9px; font-size:11.5px; color:#8a8a8a; font-weight:600;
   }
-  .idx-card .num{ font-family:var(--mono); font-size:13px; color:var(--accent-strong); }
-  .idx-card .meta{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); margin-top:10px; }
-  .card-1{ top:0; left:10px; transform:rotate(-5deg); z-index:1; }
-  .card-2{ top:70px; left:110px; transform:rotate(4deg); z-index:2; }
-  .card-3{ top:150px; left:30px; transform:rotate(-2deg); z-index:3; }
+  .app-combo{
+    height:26px; min-width:104px; border-radius:5px;
+    border:1.5px solid var(--win-border); background:var(--win-input-bg);
+    display:flex; align-items:center; justify-content:space-between; padding:0 9px;
+    font-size:11.5px; color:var(--win-text); font-weight:600;
+  }
+  .app-newbook{
+    width:30px; height:26px; border-radius:8px; flex:none;
+    background:var(--win-btn-grey-bg); border:1px solid var(--win-btn-grey-border);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .app-newbook svg{ width:13px; height:13px; }
+  .app-table{ background:var(--win-table-bg); border-radius:4px; overflow:hidden; }
+  .app-table .thead{
+    display:grid; grid-template-columns:26px 1fr 1fr 1fr;
+    background:var(--win-header-bg); padding:6px 10px; gap:8px;
+  }
+  .app-table .thead span{ color:#fff; font-size:10.5px; font-weight:700; }
+  .app-table .trow{
+    display:grid; grid-template-columns:26px 1fr 1fr 1fr;
+    padding:7px 10px; gap:8px; align-items:center;
+  }
+  .app-table .trow:nth-child(even){ background:var(--win-table-alt); }
+  .app-table .trow span{ color:#fff; font-size:11px; }
+  .app-table .trow .chk{
+    width:13px; height:13px; border:1.5px solid #8a8a8a; border-radius:3px;
+  }
+  .app-buttons{ display:flex; justify-content:center; gap:8px; margin-top:14px; }
+  .app-ibtn{
+    width:34px; height:28px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .app-ibtn svg{ width:14px; height:14px; }
+  .app-ibtn.blue{ background:var(--win-btn-blue-bg); border:1px solid var(--win-btn-blue-border); }
+  .app-ibtn.grey{ background:var(--win-btn-grey-bg); border:1px solid var(--win-btn-grey-border); }
+  .app-ibtn.red{ background:var(--win-btn-red-bg); border:1px solid var(--win-btn-red-border); }
+  .app-ibtn.green{ background:var(--win-btn-green-bg); border:1px solid var(--win-btn-green-border); }
+
+  /* a light-window dialog, matching view_dialog.py exactly */
+  .win-dialog{
+    font-family:"Segoe UI", var(--sans);
+    background:var(--win-bg);
+    border-radius:8px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    border:1px solid #00000022;
+    max-width:340px;
+  }
+  .win-dialog .app-body{ padding:20px 22px; }
+  .win-dialog h5{ margin:0 0 16px; font-size:19px; font-weight:700; color:var(--win-text); }
+  .win-dialog .drow{ display:flex; gap:8px; padding:7px 0; font-size:13px; color:var(--win-text); font-weight:600; }
+  .win-dialog .drow .k{ color:#4a4a4a; }
+  .win-dialog .dclose{
+    margin-top:14px; width:100%; height:30px; border-radius:8px;
+    background:var(--win-btn-grey-border); color:#fff; font-size:12.5px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; border:none;
+  }
 
   /* ---------- generic section ---------- */
   section{ padding:88px 0; border-bottom:1px solid var(--line); }
@@ -309,39 +381,9 @@
   .drawer h3{ font-size:19px; margin-bottom:8px; }
   .drawer p{ margin:0; color:var(--text-dim); font-size:14.5px; }
 
-  /* ---------- the open spread ---------- */
-  .spread{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:0;
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:var(--shadow);
-  }
-  @media (max-width: 780px){ .spread{ grid-template-columns:1fr; } }
-  .page{ padding:34px 32px; position:relative; }
-  .page-left{ border-right:1px dashed var(--line); }
-  @media (max-width: 780px){ .page-left{ border-right:none; border-bottom:1px dashed var(--line); } }
-  .page .folio{ font-family:var(--mono); font-size:11px; color:var(--text-faint); margin-bottom:18px; }
-
-  .book-tabs{ display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
-  .book-tabs span{
-    font-family:var(--mono); font-size:12px;
-    padding:6px 12px; border-radius:7px;
-    border:1px solid var(--line); color:var(--text-dim);
-  }
-  .book-tabs span.on{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent-strong); }
-
-  .contact-row{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:11px 0; border-bottom:1px solid var(--line);
-    font-size:14.5px;
-  }
-  .contact-row:last-child{ border-bottom:none; }
-  .contact-row .name{ font-weight:500; }
-  .contact-row .ph{ font-family:var(--mono); color:var(--text-faint); font-size:12.5px; }
+  /* ---------- side-by-side app mockups ---------- */
+  .spread-mocks{ display:grid; grid-template-columns:1.2fr 0.8fr; gap:28px; align-items:start; }
+  @media (max-width: 780px){ .spread-mocks{ grid-template-columns:1fr; } }
 
   .detail-card{
     background:var(--surface-2);
@@ -573,26 +615,39 @@
         <p class="cover-note">No admin rights needed · Desktop &amp; Start Menu shortcuts · Proper uninstaller included</p>
       </div>
 
-      <div class="card-stack" aria-hidden="true">
-        <div class="idx-card card-1">
-          <span class="tab">B — Books</span>
-          <h4>Personal</h4>
-          <div class="num">193 contacts</div>
-          <div class="meta">books/robin.db</div>
+      <figure style="margin:0;" aria-hidden="true">
+        <div class="app-mock">
+          <div class="app-titlebar">
+            <div class="app-icon"></div>
+            <span class="app-title">Contact Book</span>
+            <div class="win-controls">−&nbsp;&nbsp;▢&nbsp;&nbsp;✕</div>
+          </div>
+          <div class="app-body">
+            <div class="app-toprow">
+              <span class="lbl">Search --&gt;</span>
+              <div class="app-search">Search Contacts</div>
+              <div class="app-combo">Personal <span>▾</span></div>
+              <div class="app-newbook"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5h6.5a2 2 0 0 1 2 2V20a1.6 1.6 0 0 0-1.6-1.6H4Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 4.5h-6.5a2 2 0 0 0-2 2V20a1.6 1.6 0 0 1 1.6-1.6H20Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+            </div>
+            <div class="app-table">
+              <div class="thead"><span></span><span>Name</span><span>Phone No.</span><span>Email</span></div>
+              <div class="trow"><span class="chk"></span><span>Naruto Uzumaki</span><span>+81 90-1234-5678</span><span>naruto@leaf.com</span></div>
+              <div class="trow"><span class="chk"></span><span>Gojo Satoru</span><span>+81 90-1234-5679</span><span>gojo@jujutsu.com</span></div>
+              <div class="trow"><span class="chk"></span><span>Itachi Uchiha</span><span>+81 90-5555-1234</span><span>Email Not Added</span></div>
+            </div>
+            <div class="app-buttons">
+              <div class="app-ibtn blue" title="View"><svg viewBox="0 0 24 24" fill="none"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" stroke="#fff" stroke-width="1.8"/></svg></div>
+              <div class="app-ibtn blue" title="Add"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+              <div class="app-ibtn blue" title="Edit"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20l.9-3.9L16.2 4.8a1.4 1.4 0 0 1 2 0l1 1a1.4 1.4 0 0 1 0 2L7.9 19.1 4 20Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M14.6 6.4l3 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="app-ibtn red" title="Delete"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/><path d="M9 7V4.8c0-.44.36-.8.8-.8h4.4c.44 0 .8.36.8.8V7" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 7l1 12.2c.05.98.86 1.8 1.85 1.8h6.3c.99 0 1.8-.82 1.85-1.8L18 7" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="app-ibtn grey" title="Import"><svg viewBox="0 0 24 24" fill="none"><path d="M7.5 17.5A4.5 4.5 0 0 1 8 8.6a5.5 5.5 0 0 1 10.6 1.9A3.9 3.9 0 0 1 18 17.5H7.5Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 11v6.5M9.2 15.2 12 18l2.8-2.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="app-ibtn grey" title="Export"><svg viewBox="0 0 24 24" fill="none"><path d="M7.5 17.5A4.5 4.5 0 0 1 8 8.6a5.5 5.5 0 0 1 10.6 1.9A3.9 3.9 0 0 1 18 17.5H7.5Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 17.5V11M9.2 13.3 12 10.5l2.8 2.8" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <div class="app-ibtn green" title="Call"><svg viewBox="0 0 24 24" fill="none"><path d="M5.3 3.5h3.1c.5 0 .95.34 1.08.82l.9 3.3a1.13 1.13 0 0 1-.32 1.14l-1.7 1.55a13.7 13.7 0 0 0 5.83 5.83l1.55-1.7a1.13 1.13 0 0 1 1.14-.32l3.3.9c.48.13.82.58.82 1.08v3.1c0 .63-.53 1.13-1.16 1.09-8.02-.5-14.4-6.88-14.9-14.9-.04-.63.46-1.16 1.09-1.16Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+            </div>
+          </div>
         </div>
-        <div class="idx-card card-2">
-          <span class="tab">C — Call</span>
-          <h4>Gojo Satoru</h4>
-          <div class="num">+81 90-1234-5679</div>
-          <div class="meta">via Phone Link ↗</div>
-        </div>
-        <div class="idx-card card-3">
-          <span class="tab">V — Vcf</span>
-          <h4>Import</h4>
-          <div class="num">25 detected</div>
-          <div class="meta">drag &amp; drop .vcf</div>
-        </div>
-      </div>
+        <figcaption>The actual main window — same layout, same colors, same icon set as the real app.</figcaption>
+      </figure>
     </div>
   </header>
 
@@ -654,39 +709,54 @@
   <section id="spread">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">An open spread</span>
-        <h2>Switch books on the left page, read the card on the right.</h2>
-        <p>A sample spread — the names are from the app's own export example, not a live book.</p>
+        <span class="eyebrow">Switch books, view a contact</span>
+        <h2>Pick a book from the dropdown. The View button opens exactly this.</h2>
+        <p>Both mockups below match the real widget styling pixel-for-pixel — same fonts, same hex codes, same layout as <code class="mono">scripts/main_window.py</code> and <code class="mono">scripts/view_dialog.py</code>.</p>
       </div>
 
-      <figure style="margin:0;">
-        <div class="spread">
-          <div class="page page-left">
-            <div class="folio">fol. i — book selector</div>
-            <div class="book-tabs">
-              <span class="on">Personal</span>
-              <span>Work</span>
-              <span>Family</span>
+      <div class="spread-mocks">
+        <figure style="margin:0;">
+          <div class="app-mock">
+            <div class="app-titlebar">
+              <div class="app-icon"></div>
+              <span class="app-title">Contact Book</span>
+              <div class="win-controls">−&nbsp;&nbsp;▢&nbsp;&nbsp;✕</div>
             </div>
-            <div class="contact-row"><span class="name">Itachi Uchiha</span><span class="ph">+81 90-5555-1234</span></div>
-            <div class="contact-row"><span class="name">Sakura Haruno</span><span class="ph">+81 90-4444-5678</span></div>
-            <div class="contact-row"><span class="name">Gojo Satoru</span><span class="ph">+81 90-1234-5679</span></div>
-            <div class="contact-row"><span class="name">Kakashi Hatake</span><span class="ph">+81 90-3333-9999</span></div>
-          </div>
-          <div class="page">
-            <div class="folio">fol. ii — contact detail</div>
-            <div class="detail-card">
-              <div class="initial">G</div>
-              <h4>Gojo Satoru</h4>
-              <div class="detail-row"><span class="k">Phone</span><span class="v">+81 90-1234-5679</span></div>
-              <div class="detail-row"><span class="k">Email</span><span class="v">gojo@jujutsu.com</span></div>
-              <div class="detail-row"><span class="k">Book</span><span class="v">personal.db</span></div>
-              <div class="detail-row"><span class="k">Device</span><span class="v">— (tel: handoff)</span></div>
+            <div class="app-body">
+              <div class="app-toprow">
+                <span class="lbl">Search --&gt;</span>
+                <div class="app-search">Search Contacts</div>
+                <div class="app-combo">Work <span>▾</span></div>
+                <div class="app-newbook"><svg viewBox="0 0 24 24" fill="none"><path d="M4 4.5h6.5a2 2 0 0 1 2 2V20a1.6 1.6 0 0 0-1.6-1.6H4Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M20 4.5h-6.5a2 2 0 0 0-2 2V20a1.6 1.6 0 0 1 1.6-1.6H20Z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+              </div>
+              <div class="app-table">
+                <div class="thead"><span></span><span>Name</span><span>Phone No.</span><span>Email</span></div>
+                <div class="trow"><span class="chk"></span><span>Sakura Haruno</span><span>+81 90-4444-5678</span><span>sakura@leaf.com</span></div>
+                <div class="trow"><span class="chk"></span><span>Kakashi Hatake</span><span>+81 90-3333-9999</span><span>Email Not Added</span></div>
+              </div>
             </div>
           </div>
-        </div>
-        <figcaption>Sample entry from the README's own VCF export example — not a real contact.</figcaption>
-      </figure>
+          <figcaption>Same window, a different book selected — each book is its own SQLite file.</figcaption>
+        </figure>
+
+        <figure style="margin:0;">
+          <div class="win-dialog">
+            <div class="app-titlebar">
+              <div class="app-icon"></div>
+              <span class="app-title">Contact Details</span>
+              <div class="win-controls">✕</div>
+            </div>
+            <div class="app-body">
+              <h5>Contact Details</h5>
+              <div class="drow"><span class="k">Name -&gt;</span><span>Sakura Haruno</span></div>
+              <div class="drow"><span class="k">Phone No. -&gt;</span><span>+81 90-4444-5678</span></div>
+              <div class="drow"><span class="k">Email -&gt;</span><span>sakura@leaf.com</span></div>
+              <div class="dclose">Close</div>
+            </div>
+          </div>
+          <figcaption>The View dialog you get for that row — same title casing, same bold Segoe UI labels.</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
