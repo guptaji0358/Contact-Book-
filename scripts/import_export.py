@@ -16,16 +16,68 @@ class DropTargetWidget(QWidget):
         super().__init__(parent)
         self.on_file_dropped = on_file_dropped
         self.setAcceptDrops(True)
+        self._buildDropOverlay()
+
+    def _buildDropOverlay(self):
+        self.DropOverlay = QLabel(self)
+        self.DropOverlay.setText("Drop VCF file here")
+        self.DropOverlay.setAlignment(Qt.AlignCenter)
+        self.DropOverlay.setStyleSheet(
+            "background-color: rgba(0, 120, 215, 200);"
+            "color: white; font-size:18px; font-weight:bold;"
+            "font-family:'Segoe UI'; border: 2px dashed white;"
+        )
+        self.DropOverlay.hide()
+
+        self.DropOverlayEffect = QGraphicsOpacityEffect(self.DropOverlay)
+        self.DropOverlay.setGraphicsEffect(self.DropOverlayEffect)
+
+        FadeIn = QPropertyAnimation(self.DropOverlayEffect, b"opacity", self)
+        FadeIn.setDuration(700)
+        FadeIn.setStartValue(0.35)
+        FadeIn.setEndValue(1.0)
+        FadeIn.setEasingCurve(QEasingCurve.InOutSine)
+
+        FadeOut = QPropertyAnimation(self.DropOverlayEffect, b"opacity", self)
+        FadeOut.setDuration(700)
+        FadeOut.setStartValue(1.0)
+        FadeOut.setEndValue(0.35)
+        FadeOut.setEasingCurve(QEasingCurve.InOutSine)
+
+        self.DropOverlayAnimation = QSequentialAnimationGroup(self)
+        self.DropOverlayAnimation.addAnimation(FadeIn)
+        self.DropOverlayAnimation.addAnimation(FadeOut)
+        self.DropOverlayAnimation.setLoopCount(-1)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.DropOverlay.setGeometry(self.rect())
+
+    def _startDropAnimation(self):
+        self.DropOverlay.setGeometry(self.rect())
+        self.DropOverlay.show()
+        self.DropOverlay.raise_()
+        self.DropOverlayAnimation.start()
+
+    def _stopDropAnimation(self):
+        self.DropOverlayAnimation.stop()
+        self.DropOverlay.hide()
 
     def dragEnterEvent(self, event: QDragEnterEvent):
         if event.mimeData().hasUrls() and any(
             url.toLocalFile().lower().endswith(".vcf") for url in event.mimeData().urls()
         ):
             event.acceptProposedAction()
+            self._startDropAnimation()
         else:
             event.ignore()
 
+    def dragLeaveEvent(self, event):
+        self._stopDropAnimation()
+
     def dropEvent(self, event: QDropEvent):
+        self._stopDropAnimation()
+
         vcf_paths = [
             url.toLocalFile() for url in event.mimeData().urls()
             if url.toLocalFile().lower().endswith(".vcf")
